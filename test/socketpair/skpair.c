@@ -25,12 +25,12 @@ get_data(int nCount) {
 		}
 		//~ printf("l= %d\n", l);		
 
-		if (buf[count] != '$') {
+		if (buf[1024*1024-10*count] != count%128) {
 			printf("Received error  buf[%d]=%c\n", count, buf[count]);
 			exit(1);
 		}
 		send(sockets[0], "ack", 4, 0);
-		//~ printf("Received [%d]\n", count);
+		// printf("Received [%d]\n", count);
 		count ++;
 	}
 }
@@ -43,7 +43,8 @@ send_data(int nCount) {
 	int count = 0;
 	char buf_[10];
 	while (count < nCount) {
-		buf[count] = '$';
+		memset(buf, count%128, 1024*1024);
+		buf[1024*1024-10*count] = count % 128;
 		send(sockets[1], buf, 1024*1024, 0);
 		//~ printf("Sent [%d]\n	-- buf[%d] = %c\n", count, count, buf[count]);
 
@@ -77,10 +78,10 @@ main(int argc, char** argv) {
 	
 	if (pid != 0) {		/* parent process */
 		close(sockets[0]);
-		send_data(100000);
+		send_data(20000);
 	} else {
 		close(sockets[1]);
-		get_data(100000);
+		get_data(20000);
 		sleep(2);
 		exit(0);
 	}
