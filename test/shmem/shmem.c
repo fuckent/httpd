@@ -5,79 +5,59 @@ void * shmem;
 sem_t*  semfd;
 void
 get_data(int nCount) {
+	sleep(1);
 	sem_t * sem = sem_open("/httpd_sem", O_CREAT, 00700, 0);
 	sem_t * acksem = sem_open("/httpd_ack_sem", O_CREAT, 00700, 0);
 	if (sem == NULL || acksem == NULL) {
 		perror("sem_open failed");
 		exit(1);
 	}
-	/*
-	char str[100];
-	sem_wait(sem);
-	strcpy(str, shmem);
-	printf("Recv: %s\n", str);
-	*/
-	char * buf = malloc(1024*1024);
+
+	char * buf = malloc(MEM_SIZE);
 	if (buf == NULL) exit(2);
 	int count = 0;
 	
 	while (count < nCount) {
 		sem_wait(sem);
-		memcpy(buf, shmem, 1024*1024);
-		/*int l = 0;
-		while ( l != 1024*1024){
-			l += recv(sockets[0], buf + l, 1024*1024, 0);
-
-		}*/
-		//~ printf("l= %d\n", l);		
-
-		if (buf[1024*1024-10*count] != count%128) {
-			printf("Received error  buf[%d]=%c\n", count, buf[count]);
+		memcpy(buf, shmem, MEM_SIZE);
+		int c = count % 128;
+		if (buf[MEM_SIZE-10*count] != c) {
+			printf("MEM SIZE is %d\n", MEM_SIZE);
+			printf("Received error  buf[%d]=%d\n", MEM_SIZE-10*count, buf[MEM_SIZE-10*count]);
 			exit(1);
 		}
+		//~ printf("got %d\n", count );
 		sem_post(acksem);
-		// send(sockets[0], "ack", 4, 0);
-		//printf("Received [%d]\n", count);
 		count ++;
 	}
+	sem_close(sem);
+	sem_close(acksem);
 }
 
 void
 send_data(int nCount) {
 	sem_t * sem = sem_open("/httpd_sem", O_CREAT, 00700, 0);
 	sem_t * acksem = sem_open("/httpd_ack_sem", O_CREAT, 00700, 0);
+	
 	if (sem == NULL)
 	{
 		perror("sem_open failed");
 		exit(1);
 	}
-	/*
-	strcpy(shmem, "Kia chu la chu ech con, co hai la hai mat tron");
-	sleep(20);
-	sem_post(sem);
-	*/
 	
-	char * buf = malloc(1024*1024); 
+	char * buf = malloc(MEM_SIZE); 
 	if (buf == NULL)
 		{exit(1);}
 	
 	int count = 0;
-	//char buf_[10];
 	while (count < nCount) {
-		memset(shmem, count%128, 1024*1024);
-		(char*)(shmem)[1024*1024-10*count] = count % 128;
-		// memcpy(shmem, buf, 1024*1024);
+		memset(buf, count%128, MEM_SIZE);
+		memcpy(shmem, buf, MEM_SIZE);
+		//printf("+++count %d---%d\n --- %d", count, ((char*)shmem)[1], buf[1]);
+		//~ printf("sent %d\n", count );		
 		sem_post(sem);
 		sem_wait(acksem);
 		
-		//send(sockets[1], buf, 1024*1024, 0);
-		//~ printf("Sent [%d]\n	-- buf[%d] = %c\n", count, count, buf[count]);
-
-		/*recv(sockets[1], buf_, 4, 0);
-		if (strcmp(buf_, "ack") != 0) {
-			perror("Transfer error");
-			exit(1);
-		}*/
 		count++;
 	}
 }
@@ -85,15 +65,16 @@ send_data(int nCount) {
 
 int
 main(int argc, char** argv) {
-	timer_t start_t, end_t;
+	time_t start_t, end_t;
 
-	printf("Socketpair testing program\n\n");
-	time((time_t*)&start_t);
-	printf("Started time : %s", ctime((time_t*)&start_t));
+	printf("Shmem testing program\n\n");
+	time(&start_t);
+	printf("Started time : %s", ctime(&start_t));
 	
-	//semfd = sem_open("/sem", O_CREAT);
+	sem_unlink("httpd_sem");
+	sem_unlink("httpd_ack_sem");
+	shm_unlink("/httpd_shmem");
 	
-	//shm_unlink("/httpd/shmem");
 	int shmemfd = shm_open("/httpd_shmem", O_RDWR | O_CREAT, 00700);
 
 	if (shmemfd == -1) {
@@ -101,26 +82,20 @@ main(int argc, char** argv) {
 		exit(1);
 	}
 
-	ftruncate(shmemfd, 1024*1024);
+	ftruncate(shmemfd, MEM_SIZE);
 	if (fork() == 0){
-		shmem = mmap(NULL, 1024*1024, PROT_READ, MAP_SHARED, shmemfd, 0);
-		printf("pointer #2: %p\n", shmem);
-		//sleep(2);
-		//char str[100];
-		//strcpy(str, shmem); //, "Hom qua em toi truong");
-		//printf("Recv: %s\n", str);
-		get_data(20000);
+		shmem = mmap(NULL, MEM_SIZE, PROT_READ, MAP_SHARED, shmemfd, 0);
+		get_data(TIMES);
 		exit(0);
 	}
 
-	shmem = mmap(NULL, 1024*1024, PROT_WRITE, MAP_SHARED, shmemfd, 0);
-	printf("pointer #1: %p\n", shmem);
-	//strcpy(shmem, "Hom qua em toi truong");
-	send_data(20000);
+	shmem = mmap(NULL, MEM_SIZE, PROT_WRITE, MAP_SHARED, shmemfd, 0);
+	send_data(TIMES);
 	
 	/* parent process here */
-	time((time_t*)&end_t);
-	printf("Ended time   : %s\n", ctime((time_t*)&end_t));
+	time(&end_t);
+	printf("Ended time   : %s", ctime(&end_t));
+	printf("Ran in %0.0f seconds\n\n", difftime(end_t, start_t));
 	
 	printf("Done!\n");
 	sleep(1);

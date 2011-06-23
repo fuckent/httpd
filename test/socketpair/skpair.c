@@ -13,19 +13,19 @@ int sockets[2];
 
 void
 get_data(int nCount) {
-	char * buf = malloc(1024*1024); /* 1MB */
+	char * buf = malloc(MEM_SIZE); /* 1MB */
 	if (buf == NULL) exit(2);
 	int count = 0;
 	
 	while (count < nCount) {
 		int l = 0;
-		while ( l != 1024*1024){
-			l += recv(sockets[0], buf + l, 1024*1024, 0);
+		while ( l != MEM_SIZE){
+			l += recv(sockets[0], buf + l, MEM_SIZE, 0);
 
 		}
 		//~ printf("l= %d\n", l);		
 
-		if (buf[1024*1024-10*count] != count%128) {
+		if (buf[MEM_SIZE-10*count] != count%128) {
 			printf("Received error  buf[%d]=%c\n", count, buf[count]);
 			exit(1);
 		}
@@ -37,15 +37,14 @@ get_data(int nCount) {
 
 void
 send_data(int nCount) {
-	char * buf = malloc(1024*1024); /* 1MB */
+	char * buf = malloc(MEM_SIZE); /* 1MB */
 	if (buf == NULL)
 		{exit(1);}
 	int count = 0;
 	char buf_[10];
 	while (count < nCount) {
-		memset(buf, count%128, 1024*1024);
-		buf[1024*1024-10*count] = count % 128;
-		send(sockets[1], buf, 1024*1024, 0);
+		memset(buf, count%128, MEM_SIZE);
+		send(sockets[1], buf, MEM_SIZE, 0);
 		//~ printf("Sent [%d]\n	-- buf[%d] = %c\n", count, count, buf[count]);
 
 		recv(sockets[1], buf_, 4, 0);
@@ -59,11 +58,11 @@ send_data(int nCount) {
 
 int
 main(int argc, char** argv) {
-	timer_t start_t, end_t;
+	time_t start_t, end_t;
 
 	printf("Socketpair testing program\n\n");
-	time((time_t*)&start_t);
-	printf("Started time : %s", ctime((time_t*)&start_t));
+	time(&start_t);
+	printf("Started time : %s", ctime(&start_t));
 	
 	if (socketpair(AF_UNIX, SOCK_STREAM, 0, sockets) < 0) {
 		perror("socketpair() error!");
@@ -78,19 +77,20 @@ main(int argc, char** argv) {
 	
 	if (pid != 0) {		/* parent process */
 		close(sockets[0]);
-		send_data(20000);
+		send_data(TIMES);
 	} else {
 		close(sockets[1]);
-		get_data(20000);
+		get_data(TIMES);
 		sleep(2);
 		exit(0);
 	}
 	
 	/* parent process here */
-	time((time_t*)&end_t);
-	printf("Ended time   : %s\n", ctime((time_t*)&end_t));
-	
+	time(&end_t);
+	printf("Ended time   : %s", ctime(&end_t));
+	printf("Ran in %0.0f seconds\n\n", difftime(end_t, start_t));
+
 	printf("Done!\n");
-	sleep(2);
+	sleep(1);
 	return 0;
 }

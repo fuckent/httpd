@@ -1,0 +1,15 @@
+OBJDIRS += socketpair
+
+SKPAIR_SRCFILES :=	socketpair/skpair.c 
+
+SKPAIR_OBJFILES := $(patsubst socketpair/%.c, $(OBJDIR)/socketpair/%.o, $(SKPAIR_SRCFILES))
+
+$(OBJDIR)/socketpair/%.o: socketpair/%.c
+	$(V)echo + cc $<
+	$(V)mkdir -p $(@D)
+	$(V)$(CC) $(CCFLAGS) -c -o $@ $<
+
+$(OBJDIR)/socketpair_bin: $(SKPAIR_OBJFILES)
+	$(V)echo + cc $@
+	$(V)$(LD) $(LDFLAGS) -o $@ $<
+	
