@@ -1,11 +1,3 @@
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h> 
-#include <sys/types.h>
-#include <sys/socket.h>
-
 #include "skpair.h"
 
 int sockets[2];

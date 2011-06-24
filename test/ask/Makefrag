@@ -1,0 +1,16 @@
+OBJDIRS += ask
+ASK_FLAGS := -ggdb
+
+ASK_SRCFILES :=	ask/ask.c 
+
+ASK_OBJFILES := $(patsubst ask/%.c, $(OBJDIR)/ask/%.o, $(ASK_SRCFILES))
+
+$(OBJDIR)/ask/%.o: ask/%.c
+	$(V)echo + cc $<
+	$(V)mkdir -p $(@D)
+	$(V)$(CC) $(CCFLAGS) $(ASK_FLAGS) -c -o $@ $<
+
+$(OBJDIR)/ask_bin: $(ASK_OBJFILES)
+	$(V)echo + cc $@
+	$(V)$(LD) $(LDFLAGS) -o $@ $<
+	
