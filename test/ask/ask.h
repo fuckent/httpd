@@ -18,11 +18,17 @@
 #include <semaphore.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include "html.h"
+#include "buf.h"
 
 #define BACK_LOG				10
+
 #define MAX_EVENTS				10
 #define PORT					"1234"
 #define NPROCESS				4
+
+
+//typedef int BOOL;
 
 typedef
 enum
@@ -46,10 +52,11 @@ static httpd_return_t	httpd_kill_all_child();
 static httpd_return_t	httpd_do_child(int id);
 static httpd_return_t	httpd_add_child(int);
 static httpd_return_t	httpd_do_parent();
-static httpd_return_t	httpd_setup_select();
+//static httpd_return_t	httpd_setup_select();
 static httpd_return_t	httpd_send_to_child(int childID);
 static int				httpd_get_child_ID();
 static httpd_return_t 	open_mq();
 static httpd_return_t	httpd_process_client();
-
+static httpd_return_t	httpd_close_socket(int fd);
+static char *			httpd_read_data(int fd, int * len);
 #endif
