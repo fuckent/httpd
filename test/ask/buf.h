@@ -3,7 +3,7 @@
 
 #define BUF_SIZE				1*1024
 
-#include <stdlib.h>
+#include "inc.h"
 
 char * httpd_buf_get_buf();
 

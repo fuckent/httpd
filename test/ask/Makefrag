@@ -1,7 +1,13 @@
 OBJDIRS += ask
-ASK_FLAGS := -ggdb
+ASK_FLAGS := -ggdb -Wno-unused-result
 
-ASK_SRCFILES :=	ask/ask.c ask/html.c ask/buf.c
+ASK_SRCFILES :=	ask/ask.c \
+				ask/html.c \
+				ask/buf.c  \
+				ask/do_child.c \
+				ask/do_parent.c \
+				ask/connect.c \
+				ask/debug.c
 
 ASK_OBJFILES := $(patsubst ask/%.c, $(OBJDIR)/ask/%.o, $(ASK_SRCFILES))
 
@@ -11,6 +17,6 @@ $(OBJDIR)/ask/%.o: ask/%.c
 	$(V)$(CC) $(CCFLAGS) $(ASK_FLAGS) -c -o $@ $<
 
 $(OBJDIR)/ask_bin: $(ASK_OBJFILES)
-	$(V)echo + cc $@ 
+	$(V)echo + cc $@
 	$(V)$(LD) $(LDFLAGS) -o $@ $^
 

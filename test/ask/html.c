@@ -46,7 +46,7 @@ httpd_html_send_file(char * name, int fd)
 	sprintf(buf, "%s\nConnection: close\nContent-Type: text/html\nContent-Length: %d\n\n", str, (int)st.st_size);
 	
 
-	write(fd, buf, strlen(buf));
+	send(fd, buf, strlen(buf), 0);
 	sendfile(fd, r, 0, st.st_size);
 	
 	return 0;
