@@ -16,7 +16,7 @@ http_html_get_request_parse(char * init_line)
 	if (tail[i] == ' ')
 	{
 		//~ printf(" rr= %d\n", strncmp(tail+i+1,  "HTTP/1.0", 8));
-		if (strncmp(tail+i+1,  "HTTP/1.1", 8) != 0)
+		if (strncmp(tail+i+1,  "HTTP/1.", 7) != 0)
 			return NULL;
 
 		tail[i] = 0;

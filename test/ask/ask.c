@@ -43,7 +43,7 @@ main()
 
 		if (pid == 0)
 		{
-			//sleep(20);
+			sleep(30);
 			httpd_do_child(i);					/* child */
 			return -1;
 		}

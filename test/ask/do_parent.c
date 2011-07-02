@@ -70,9 +70,10 @@ httpd_send_to_child(int childID)
 	
 	ts.tv_sec += 2;
 	
-	int s;
-	while ((s = sem_timedwait(sem, &ts)) == -1 && errno == EINTR)
-		continue;       /* Restart if interrupted by handler */
+	int s=0;
+	sem_wait(sem);
+	//while ((s = sem_timedwait(sem, NULL)) == -1 && errno == EINTR)
+	//	continue;       /* Restart if interrupted by handler */
 	
 	if (s == -1)
 	{

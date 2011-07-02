@@ -26,7 +26,7 @@
 
 #define MAX_EVENTS				10
 #define PORT					"1234"
-#define NPROCESS				4
+#define NPROCESS				1
 #define NFDPROCESS				1024
 
 #define MAX_NUMBER_FD			100
