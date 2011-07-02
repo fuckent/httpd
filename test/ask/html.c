@@ -1,6 +1,6 @@
 #include "html.h"
 
-char * 
+char *
 http_html_get_request_parse(char * init_line)
 {
 	printf("string: %s\n", init_line);
@@ -12,7 +12,7 @@ http_html_get_request_parse(char * init_line)
 	//~ printf ("tail = %s\n", tail);
 	int i = 0;
 	while (tail[i] != ' ' && tail[i] != CR) i++;
-	
+
 	if (tail[i] == ' ')
 	{
 		//~ printf(" rr= %d\n", strncmp(tail+i+1,  "HTTP/1.0", 8));
@@ -25,7 +25,7 @@ http_html_get_request_parse(char * init_line)
 	return tail+1;
 }
 
-int 
+int
 httpd_html_send_file(char * name, int fd)
 {
 	int r = open(name, O_RDONLY);
@@ -44,10 +44,12 @@ httpd_html_send_file(char * name, int fd)
 	fstat(r, &st);
 
 	sprintf(buf, "%s\nConnection: close\nContent-Type: text/html\nContent-Length: %d\n\n", str, (int)st.st_size);
-	
 
+	off_t size = 0;
 	send(fd, buf, strlen(buf), 0);
-	sendfile(fd, r, 0, st.st_size);
-	
+	while (sendfile(fd, r, &size, st.st_size) != 0)
+		MSG("sent again");
+	MSG("hi, i'm httpd");
+
 	return 0;
 }

@@ -49,6 +49,19 @@ httpd_add_fd(int fd)
 	return SUCCESS;
 }
 
+static void
+sigpipe_handler(int sig, siginfo_t *si, void *unused)
+{
+	printf("Got a signal (%d) from %d\n", sig, si->si_pid);
+	
+	if (sig == SIGPIPE)
+	{
+		MSG("SIGPIPE");
+	}
+	
+}
+
+
 
 static void
 handler(int sig, siginfo_t *si, void *unused)
@@ -80,7 +93,15 @@ httpd_setup_handler()
 	sa.sa_flags = SA_SIGINFO;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_sigaction = handler;
-	return sigaction(SIG_MPWP, &sa, NULL);
+	sigaction(SIG_MPWP, &sa, NULL);
+
+	struct sigaction sa1;
+	sa1.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa1.sa_mask);
+	sa1.sa_sigaction = sigpipe_handler;
+	sigaction(SIGPIPE, &sa1, NULL);
+
+	return SUCCESS;
 }
 
 
