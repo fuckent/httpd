@@ -22,6 +22,17 @@
 #include <sys/stat.h>
 
 
+typedef int BOOL;
+
+#ifndef FALSE
+#define FALSE					0
+#endif
+
+#ifndef TRUE
+#define TRUE					!FALSE
+#endif
+
+
 #define BACK_LOG				10
 
 #define MAX_EVENTS				10
@@ -60,7 +71,7 @@ extern int				epollfd;
 extern int				fd;
 extern int 				fds[MAX_NUMBER_FD];
 extern pid_t 			pid_list[NPROCESS];
+extern BOOL				sigpipe_flag;
 
-typedef int BOOL;
 
 #endif

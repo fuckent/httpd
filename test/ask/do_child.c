@@ -56,6 +56,7 @@ sigpipe_handler(int sig, siginfo_t *si, void *unused)
 	
 	if (sig == SIGPIPE)
 	{
+		sigpipe_flag = TRUE;
 		MSG("SIGPIPE");
 	}
 	

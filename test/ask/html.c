@@ -48,7 +48,15 @@ httpd_html_send_file(char * name, int fd)
 	off_t size = 0;
 	send(fd, buf, strlen(buf), 0);
 	while (sendfile(fd, r, &size, st.st_size) != 0)
+	{
+		if (sigpipe_flag)
+		{
+			sigpipe_flag = FALSE;
+			break;
+		}
 		MSG("sent again");
+	}
+	
 	MSG("hi, i'm httpd");
 
 	return 0;

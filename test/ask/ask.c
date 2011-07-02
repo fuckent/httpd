@@ -17,7 +17,7 @@ int				epollfd;
 int				fd;
 int 			fds[MAX_NUMBER_FD];
 pid_t 			pid_list[NPROCESS];
-
+BOOL			sigpipe_flag;
 
 int
 main()
