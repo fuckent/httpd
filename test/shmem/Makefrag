@@ -1,0 +1,15 @@
+OBJDIRS += shmem
+
+SHMEM_SRCFILES :=	shmem/shmem.c 
+
+SHMEM_OBJFILES := $(patsubst shmem/%.c, $(OBJDIR)/shmem/%.o, $(SHMEM_SRCFILES))
+
+$(OBJDIR)/shmem/%.o: shmem/%.c
+	$(V)echo + cc $<
+	$(V)mkdir -p $(@D)
+	$(V)$(CC) $(CCFLAGS) -c -o $@ $< 
+
+$(OBJDIR)/shmem_bin: $(SHMEM_OBJFILES)
+	$(V)echo + cc $@
+	$(V)$(LD) $(LDFLAGS) -o $@ $< 
+	
