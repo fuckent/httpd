@@ -23,7 +23,7 @@ int
 main()
 {
 	httpd_debug_config();
-	if (httpd_socket_listen(PORT, &fd) != SUCCESS)
+	if (httpd_connect_socket_listen(PORT, &fd) != SUCCESS)
 		ERROR("listen");
 	
 	int pid;

@@ -2,7 +2,7 @@
 
 
 int
-httpd_close_socket(int fd)
+httpd_connect_close_socket(int fd)
 {
 	printf("shut down fd = %d\n", fd);
 	epoll_ctl(epollfd, EPOLL_CTL_DEL, fd, NULL);
@@ -13,7 +13,7 @@ httpd_close_socket(int fd)
 
 
 char *
-httpd_read_data(int fd, int* len)
+httpd_connect_read_data(int fd, int* len)
 {
 	char * buf = httpd_buf_get_buf(); /* BUF_SIZE */
 	if (buf == NULL) 
@@ -43,7 +43,7 @@ httpd_read_data(int fd, int* len)
 }
 
 httpd_return_t
-httpd_socket_listen(char * port, int * fd)
+httpd_connect_socket_listen(char * port, int * fd)
 {
 	struct addrinfo hints;
 	struct addrinfo *result, *rp;
