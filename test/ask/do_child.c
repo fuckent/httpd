@@ -20,7 +20,7 @@ httpd_do_child(int id)
 	struct epoll_event events[MAX_EVENTS];
 	while(1)
 	{
-		nfds = epoll_wait(epollfd, events, MAX_EVENTS , -1);
+		nfds = epoll_wait(epollfd, events, MAX_EVENTS , 0);
 		if (nfds == -1) continue; //ERROR("epoll_pwait");
 		
 		int i;

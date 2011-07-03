@@ -64,6 +64,7 @@ enum
 		E_TIME_OUT				= 	-6,		
 		E_MACHINE_EMPTY			=	-7,
 		E_MACHINE_INVAILD_STATE	=	-8,
+		E_MACHINE_READ_SOCKET	=	-9,
 } httpd_return_t;
 
 

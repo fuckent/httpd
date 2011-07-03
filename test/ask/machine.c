@@ -31,6 +31,8 @@ machine_get()
 	
 	machine_add_to_list(pmc, &mc_used_list);
 	
+	pmc->buf = httpd_buf_get_buf();
+	
 	return pmc;
 }
 
@@ -83,11 +85,26 @@ httpd_return_t	machine_go_to_next_state(machine_t * mc)
 	switch (mc->state)
 	{
 		case MC_STATE_READ:
+			machine_read_socket(mc);
 			break;
 		
 		case MC_STATE_WRITE:
+			machine_write_socket(mc);
+
 			break;
 		
+		case MC_STATE_PROCESS:
+			machine_process(mc);
+			break;
+			
+		case MC_STATE_OPEN:
+			machine_open(mc);
+			break;
+			
+		case MC_STATE_CLOSE:
+			machine_close(mc);
+			break;
+			
 		default:
 			return E_MACHINE_INVAILD_STATE;
 	}
@@ -101,6 +118,8 @@ machine_remove(machine_t * mc)
 {
 	machine_remove_from_list(mc, &mc_used_list);
 	machine_add_to_list(mc, &mc_free_list);
+	
+	httpd_buf_delete_buf(mc->buf);
 	
 	return SUCCESS;
 }
@@ -132,3 +151,17 @@ machine_remove_from_list(machine_t * mc, machine_list_t * list)
 	
 	return SUCCESS;
 }
+
+
+httpd_return_t	
+machine_read_socket(machine_t * mc)
+{
+	int r = recv(mc->fd, mc->buf, BUF_SIZE, 0);
+	if (r == -1)
+		return E_MACHINE_READ_SOCKET;
+		
+	mc->size = r;
+	
+	mc->state = MC_STATE_PROCESS;
+}
+
