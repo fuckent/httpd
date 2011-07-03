@@ -62,6 +62,8 @@ enum
 		E_GET_REQUEST			=	-4,
 		E_CANT_OPEN_FILE		= 	-5,
 		E_TIME_OUT				= 	-6,		
+		E_MACHINE_EMPTY			=	-7,
+		E_MACHINE_INVAILD_STATE	=	-8,
 } httpd_return_t;
 
 

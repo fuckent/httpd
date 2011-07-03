@@ -109,14 +109,16 @@ httpd_setup_handler()
 static httpd_return_t
 httpd_process_client(int newfd)
 {
-	char * buf = httpd_read_data(newfd, NULL);
+	char * buf = httpd_connect_read_data(newfd, NULL);
 	if (buf == NULL) ERROR("httpd_read_data()");
 	MSG("http_html_get_request_parse(buf)");
 	char * link  = http_html_get_request_parse(buf);
 	
 	httpd_html_send_file(link, newfd);
 
-	httpd_close_socket(newfd);
+	httpd_connect_close_socket(newfd);
+	
+	httpd_buf_delete_buf(buf);
 	
 	return SUCCESS;
 }
