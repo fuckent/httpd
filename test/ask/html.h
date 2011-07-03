@@ -7,9 +7,6 @@
 
 #define NOT_FOUND_ERROR_FILE	"404.html"
 
-#include <sys/stat.h>
-#include <sys/sendfile.h>
-
 #include "inc.h"
 
 char * 		http_html_get_request_parse(char * init_line);

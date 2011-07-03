@@ -8,6 +8,7 @@
 #include "do_child.h"
 #include "do_parent.h"
 #include "debug.h"
+#include "machine.h"
 
 
 static httpd_return_t 	open_mq();

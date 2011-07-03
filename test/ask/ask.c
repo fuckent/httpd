@@ -18,6 +18,9 @@ int				fd;
 int 			fds[MAX_NUMBER_FD];
 pid_t 			pid_list[NPROCESS];
 BOOL			sigpipe_flag;
+machine_t		mc_array[NMACHINE];
+machine_list_t	mc_free_list, mc_used_list;
+
 
 int
 main()

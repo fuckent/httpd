@@ -20,6 +20,8 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <sys/sendfile.h>
+
 
 
 typedef int BOOL;
@@ -65,6 +67,7 @@ enum
 		E_MACHINE_EMPTY			=	-7,
 		E_MACHINE_INVAILD_STATE	=	-8,
 		E_MACHINE_READ_SOCKET	=	-9,
+		E_MACHINE_SEND_FILE		=	-10,
 } httpd_return_t;
 
 

@@ -1,22 +1,32 @@
 #include "do_child.h"
 #include "html.h"
 #include "connect.h"
+#include "machine.h"
 
 int epollfd;
 
 
 static int httpd_setup_handler();
-static httpd_return_t httpd_process_client(int newfd);
+//static httpd_return_t httpd_process_client(int newfd);
 static int httpd_add_fd(int fd);
+static void delete_dead_jobs();
+static void do_jobs();
 
 
 httpd_return_t 
 httpd_do_child(int id)
 {
+	static int first_time = 1;
+	if (first_time)
+	{
+		epollfd = epoll_create(NFDPROCESS);
+		if (epollfd == -1) ERROR("epoll_create");
+		httpd_setup_handler();
+		machine_init();
+		first_time = 0;
+	}
+	
 	int nfds;
-	epollfd = epoll_create(NFDPROCESS);
-	if (epollfd == -1) ERROR("epoll_create");
-	httpd_setup_handler();
 	struct epoll_event events[MAX_EVENTS];
 	while(1)
 	{
@@ -26,14 +36,52 @@ httpd_do_child(int id)
 		int i;
 		//printf("nfds = %d\n", nfds);
 		for (i= 0; i< nfds; i++) {
-			httpd_process_client(events[i].data.fd);
+			
+			machine_t * mc = machine_get();
+			if (mc == NULL) continue;
+			
+			mc->sfd = events[i].data.fd;
+			mc->state = MC_STATE_OPEN;
 		}
 		
+		do_jobs();
+		delete_dead_jobs();
+		
+		if (mc_used_list.len == 0 && nfds == 0)
+			sleep(10);
 	}
 	
 	return SUCCESS;
 }
 
+static void
+do_jobs()
+{
+	int count = mc_used_list.len;
+	machine_t * mc = mc_used_list.mc;
+	while (count-- != 0) 
+	{
+		//printf("count = %d\n", count);
+		machine_go_to_next_state(mc);
+		mc = mc->next;
+	}
+}
+
+static void
+delete_dead_jobs()
+{
+	int count = mc_used_list.len;
+	machine_t * mc = mc_used_list.mc;
+	machine_t * mc_next;
+	while (count-- != 0) 
+	{
+		mc_next = mc->next;
+		if (mc->state == MC_STATE_DEAD)
+			machine_remove(mc);
+			
+		mc = mc_next;
+	}
+}
 
 static int
 httpd_add_fd(int fd)
@@ -105,7 +153,7 @@ httpd_setup_handler()
 	return SUCCESS;
 }
 
-
+/*
 static httpd_return_t
 httpd_process_client(int newfd)
 {
@@ -122,3 +170,4 @@ httpd_process_client(int newfd)
 	
 	return SUCCESS;
 }
+*/
