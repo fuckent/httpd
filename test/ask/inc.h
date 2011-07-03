@@ -68,6 +68,7 @@ enum
 		E_MACHINE_INVAILD_STATE	=	-8,
 		E_MACHINE_READ_SOCKET	=	-9,
 		E_MACHINE_SEND_FILE		=	-10,
+		E_MACHINE_WRITE_SOCKET	=	-11,
 } httpd_return_t;
 
 

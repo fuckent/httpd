@@ -87,7 +87,10 @@ httpd_return_t	machine_go_to_next_state(machine_t * mc)
 			break;
 		
 		case MC_STATE_WRITE:
-			machine_write_socket(mc);
+			if (machine_write_socket(mc) == E_MACHINE_WRITE_SOCKET)
+			{
+				machine_close_socket(mc);
+			}
 
 			break;
 		
@@ -173,7 +176,7 @@ machine_write_socket(machine_t * mc)
 	{
 		sigpipe_flag = FALSE;
 		mc->state = MC_STATE_CLOSE;
-		return SUCCESS;
+		return E_MACHINE_WRITE_SOCKET;
 	}
 
 

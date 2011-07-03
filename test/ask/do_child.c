@@ -48,7 +48,10 @@ httpd_do_child(int id)
 		delete_dead_jobs();
 		
 		if (mc_used_list.len == 0 && nfds == 0)
-			sleep(10);
+		{
+			int d = sleep(200);
+			printf("sleep in %d second\n", 200-d);
+		}
 	}
 	
 	return SUCCESS;
@@ -97,6 +100,8 @@ httpd_add_fd(int fd)
 	return SUCCESS;
 }
 
+
+
 static void
 sigpipe_handler(int sig, siginfo_t *si, void *unused)
 {
@@ -110,6 +115,17 @@ sigpipe_handler(int sig, siginfo_t *si, void *unused)
 	
 }
 
+static void
+sigio_handler(int sig, siginfo_t *si, void *unused)
+{
+	printf("Got a signal (%d) from %d\n", sig, si->si_pid);
+	
+	if (sig == SIGIO)
+	{
+		MSG("SIGIO");
+	}
+	
+}
 
 
 static void
@@ -124,6 +140,8 @@ handler(int sig, siginfo_t *si, void *unused)
 		*/
 		int newfd;
 		newfd = accept(fd, NULL, NULL);
+		fcntl(newfd, F_SETFL, O_ASYNC);
+		fcntl(newfd, F_SETOWN, getpid());
 		sem_post(sem);
 		if (newfd == -1) return;
 		MSG("add new fd");
@@ -149,6 +167,12 @@ httpd_setup_handler()
 	sigemptyset(&sa1.sa_mask);
 	sa1.sa_sigaction = sigpipe_handler;
 	sigaction(SIGPIPE, &sa1, NULL);
+
+	struct sigaction sa2;
+	sa2.sa_flags = SA_SIGINFO;
+	sigemptyset(&sa2.sa_mask);
+	sa2.sa_sigaction = sigio_handler;
+	sigaction(SIGIO, &sa2, NULL);
 
 	return SUCCESS;
 }
