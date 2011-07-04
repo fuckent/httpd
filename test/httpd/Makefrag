@@ -8,7 +8,8 @@ HTTPD_SRCFILES :=	httpd/httpd.c \
 				httpd/do_parent.c \
 				httpd/connect.c \
 				httpd/debug.c	\
-				httpd/machine.c
+				httpd/machine.c	\
+				httpd/time.c
 
 HTTPD_OBJFILES := $(patsubst httpd/%.c, $(OBJDIR)/httpd/%.o, $(HTTPD_SRCFILES))
 

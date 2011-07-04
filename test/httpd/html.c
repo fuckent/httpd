@@ -1,4 +1,5 @@
 #include "html.h"
+#include "time.h"
 
 char *
 http_html_get_request_parse(char * init_line)
@@ -21,7 +22,7 @@ http_html_get_request_parse(char * init_line)
 
 		tail[i] = 0;
 	} else return NULL;
-	printf("[  html.c]	request file %s\n", tail + 1);
+	printf("[%010ld]	request file %s\n", gettime(), tail + 1);
 	return tail+1;
 }
 

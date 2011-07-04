@@ -29,7 +29,7 @@ main()
 	if (httpd_connect_socket_listen(PORT, &fd) != SUCCESS)
 		ERROR("listen");
 	
-	MSG("[ httpd.c]	listen at port 1234");
+	printf("[%010ld]	listen at port 1234\n", gettime());
 	
 	int pid;
 	int i;
@@ -38,7 +38,7 @@ main()
 	sem = sem_open("/httpd_sem", O_CREAT | O_RDWR, 00700, 0);
 	open_mq();
 
-	printf("[ httpd.c]	forked %d processes\n", NPROCESS);
+	printf("[%010ld]	forked %d processes\n", gettime(), NPROCESS);
 	for (i = 0; i < NPROCESS; i++)
 	{
 		if ((pid = fork()) < 0)
@@ -49,14 +49,14 @@ main()
 
 		if (pid == 0)
 		{
-			MSG("[ httpd.c]	do child");
+			printf("[%010ld]	do child\n", gettime());
 			httpd_do_child(i);					/* child */
 			return -1;
 		}
 		else pid_list[i] = pid;
 	}
 	
-	MSG("[ httpd.c]	do parent");
+	printf("[%010ld]	do parent\n", gettime());
 	httpd_do_parent();				/* parent */
 
 	return SUCCESS;

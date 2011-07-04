@@ -3,14 +3,14 @@
 char * 
 httpd_buf_get_buf()
 {
-	MSG("[   buf.c]	get a buffer");
+	printf("[%010ld]	get a buffer\n", gettime());
 	return malloc(BUF_SIZE);
 }
 
 httpd_return_t 
 httpd_buf_delete_buf(void * buf)
 {
-	MSG("[   buf.c]	delete a buffer");
+	printf("[%010ld]	delete a buffer\n", gettime());
 	free(buf);
 	return SUCCESS;
 }

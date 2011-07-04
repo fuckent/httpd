@@ -1,4 +1,5 @@
 #include "do_parent.h"
+#include "time.h"
 
 static httpd_return_t	httpd_send_to_child(int childID);
 static int				httpd_get_child_ID();
@@ -30,10 +31,11 @@ httpd_do_parent()
 	   exit(EXIT_FAILURE);
 	}
 	
-	MSG("[do_par.c]	setup epoll catch listen sock event");
+	printf("[%010ld]	setup epoll catch listen sock event\n", gettime());
 	while (1)
 	{
 		while ((nfds = epoll_wait(epollfd, events, MAX_EVENTS , -1)) == -1 && errno == EINTR) ;
+		fflush(stdout);
 		
 		if (nfds == -1) ERROR("epoll_pwait");
 		
@@ -49,7 +51,7 @@ httpd_do_parent()
 				if (httpd_send_to_child(id) == E_TIME_OUT)
 				{
 					kill(pid_list[id], SIGKILL);
-					printf("[do_par.c]	killed %d\n (TIME OUT)", pid_list[id]);
+					printf("[%010ld]	killed %d\n (TIME OUT)", gettime(), pid_list[id]);
 
 					httpd_create_new_child(id);
 				}
@@ -65,7 +67,7 @@ static httpd_return_t
 httpd_send_to_child(int childID)
 {
 	
-	printf("[do_par.c]	send client to %d\n", pid_list[childID]);
+	printf("[%010ld]	send client to %d\n", gettime(), pid_list[childID]);
 	//mq_send(mqds[childID], "sent client", sizeof("sent client"), 0);
 	if (httpd_send_signal_to_child(childID) < 0) ;
 	//	ERROR("kill()");
@@ -150,7 +152,7 @@ static void
 child_handler(int sig, siginfo_t *si, void *unused)
 {
 	// int pid = wait(NULL);
-	printf("[do_par.c]	a process (pid:%d) dead\n", si->si_pid);
+	printf("[%010ld]	a process (pid:%d) dead\n", gettime(), si->si_pid);
 /*	int i;
 	for (i = 0; i < NPROCESS; i++)
 		if (pid_list[i] == si-> si_pid)
@@ -163,7 +165,7 @@ child_handler(int sig, siginfo_t *si, void *unused)
 static int
 httpd_setup_handler()
 {
-	MSG("[do_par.c]	set up handler from dead child");
+	printf("[%010ld]	set up handler from dead child\n", gettime());
 	struct sigaction sa;
 	sa.sa_flags = SA_SIGINFO | SA_NOCLDWAIT |SA_NODEFER;
 	sigemptyset(&sa.sa_mask);

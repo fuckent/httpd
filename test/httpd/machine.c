@@ -1,6 +1,7 @@
 #include "machine.h"
 #include "buf.h"
 #include "html.h"
+#include "time.h"
 
 httpd_return_t
 machine_init()
@@ -85,7 +86,7 @@ httpd_return_t	machine_go_to_next_state(machine_t * mc)
 		case MC_STATE_READ:
 			if (machine_read_socket(mc) < 0)
 			{
-				printf("[        ]		error when read socket %d\n", mc->sfd);
+				printf("[%010ld]	error when read socket %d\n", gettime(), mc->sfd);
 				machine_close_socket(mc);
 			}
 			break;
