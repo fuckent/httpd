@@ -6,6 +6,7 @@ static int	 			httpd_send_signal_to_child(int id);
 static httpd_return_t	httpd_create_new_child(int id);
 static int 				httpd_setup_handler();
 static void 			child_handler(int sig, siginfo_t *si, void *unused);
+static BOOL				httpd_is_alive(int id);
 
 
 httpd_return_t 
@@ -28,7 +29,8 @@ httpd_do_parent()
 	   perror("epoll_ctl: listen_sock");
 	   exit(EXIT_FAILURE);
 	}
-
+	
+	MSG("[do_par.c]	setup epoll catch listen sock event");
 	while (1)
 	{
 		while ((nfds = epoll_wait(epollfd, events, MAX_EVENTS , -1)) == -1 && errno == EINTR) ;
@@ -36,14 +38,18 @@ httpd_do_parent()
 		if (nfds == -1) ERROR("epoll_pwait");
 		
 		int i;
-		printf("nfds = %d\n", nfds);
 		for (i= 0; i< nfds; i++) {
 			if (events[i].data.fd == listen_sock) {
 				int id = httpd_get_child_ID();
+				if (!httpd_is_alive(id))
+				{
+					httpd_create_new_child(id);
+					sleep(1);
+				}
 				if (httpd_send_to_child(id) == E_TIME_OUT)
 				{
 					kill(pid_list[id], SIGKILL);
-					printf("killed %d\n", pid_list[id]);
+					printf("[do_par.c]	killed %d\n (TIME OUT)", pid_list[id]);
 
 					httpd_create_new_child(id);
 				}
@@ -59,7 +65,7 @@ static httpd_return_t
 httpd_send_to_child(int childID)
 {
 	
-	printf("Send MSG to %d\n", childID);
+	printf("[do_par.c]	send client to %d\n", pid_list[childID]);
 	//mq_send(mqds[childID], "sent client", sizeof("sent client"), 0);
 	if (httpd_send_signal_to_child(childID) < 0) ;
 	//	ERROR("kill()");
@@ -99,7 +105,6 @@ httpd_send_signal_to_child(int id)
  * 1. Check id (0 <id < NPROCESS) 
  * 2. send a signal to child
  **/
-	printf("send a signal (id = %d) to %d\n", id, pid_list[id]);
 	return kill(pid_list[id], SIG_MPWP);
 }
 
@@ -132,14 +137,11 @@ httpd_create_new_child(int id)
 
 	if (pid == 0)
 	{
-		//sleep(20);
 		httpd_do_child(id);					/* child */
 		exit(-1);
 	}
 	else pid_list[id] = pid;
 
-	printf("created %d\n", pid_list[id]);
-	
 	return SUCCESS;
 }
 
@@ -147,24 +149,32 @@ httpd_create_new_child(int id)
 static void
 child_handler(int sig, siginfo_t *si, void *unused)
 {
-	int pid = wait(NULL);
-	printf("pid = %d dead\n", pid);
-	int i;
+	// int pid = wait(NULL);
+	printf("[do_par.c]	a process (pid:%d) dead\n", si->si_pid);
+/*	int i;
 	for (i = 0; i < NPROCESS; i++)
-		if (pid_list[i] == pid)
+		if (pid_list[i] == si-> si_pid)
 		{
 			httpd_create_new_child(i);
 		}
+*/
 }
 
 static int
 httpd_setup_handler()
 {
+	MSG("[do_par.c]	set up handler from dead child");
 	struct sigaction sa;
-	sa.sa_flags = SA_SIGINFO;
+	sa.sa_flags = SA_SIGINFO | SA_NOCLDWAIT |SA_NODEFER;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_sigaction = child_handler;
 	return sigaction(SIGCHLD, &sa, NULL);
+}
+
+static BOOL httpd_is_alive(int id)
+{
+	kill(pid_list[id], 0);
+	return !(errno == ESRCH);
 }
 
 

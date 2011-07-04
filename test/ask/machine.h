@@ -4,7 +4,7 @@
 #include "inc.h"
 
 #define NMACHINE				100
-#define MACHINE_SEND_COUNT		1024*1024 /* 50KB */
+#define MACHINE_SEND_COUNT		50*1024 /* 50KB */
 
 typedef enum
 {

@@ -3,9 +3,9 @@
 char *
 http_html_get_request_parse(char * init_line)
 {
-	printf("string: %s\n", init_line);
+	//printf("string: %s\n", init_line);
 	BOOL isGet = strncmp(init_line, "GET ", 4);
-		printf("have GET\n isGet = %d\n", isGet);
+	//	printf("have GET\n isGet = %d\n", isGet);
 
 	if (isGet) return NULL;
 	char * tail = init_line + 4;
@@ -21,7 +21,7 @@ http_html_get_request_parse(char * init_line)
 
 		tail[i] = 0;
 	} else return NULL;
-	printf("tail + 1 is %s\n", tail + 1);
+	printf("[  html.c]	request file %s\n", tail + 1);
 	return tail+1;
 }
 

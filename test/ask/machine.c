@@ -5,20 +5,20 @@
 httpd_return_t
 machine_init()
 {
-		mc_free_list.len = NMACHINE;
-		mc_free_list.mc = &mc_array[0];
-		
-		int i;
-		for (i = 0; i < NMACHINE; i++)
-		{
-			mc_array[i].next = &mc_array[(i+1) % NMACHINE];
-			mc_array[i].prev = &mc_array[(i+NMACHINE - 1) % NMACHINE];
-		}
-		
-		mc_used_list.len	= 0;
-		mc_used_list.mc		= NULL;
-		
-		return SUCCESS;
+	mc_free_list.len = NMACHINE;
+	mc_free_list.mc = &mc_array[0];
+	
+	int i;
+	for (i = 0; i < NMACHINE; i++)
+	{
+		mc_array[i].next = &mc_array[(i+1) % NMACHINE];
+		mc_array[i].prev = &mc_array[(i+NMACHINE - 1) % NMACHINE];
+	}
+	
+	mc_used_list.len	= 0;
+	mc_used_list.mc		= NULL;
+	
+	return SUCCESS;
 }
 
 machine_t * 	
@@ -83,7 +83,11 @@ httpd_return_t	machine_go_to_next_state(machine_t * mc)
 	switch (mc->state)
 	{
 		case MC_STATE_READ:
-			machine_read_socket(mc);
+			if (machine_read_socket(mc) < 0)
+			{
+				printf("[        ]		error when read socket %d\n", mc->sfd);
+				machine_close_socket(mc);
+			}
 			break;
 		
 		case MC_STATE_WRITE:
@@ -163,6 +167,7 @@ machine_read_socket(machine_t * mc)
 	mc->size = r;
 	
 	mc->state = MC_STATE_PROCESS;
+	epoll_ctl(epollfd, EPOLL_CTL_DEL, mc->sfd, NULL);
 	
 	return SUCCESS;
 }
@@ -211,7 +216,6 @@ httpd_return_t
 machine_close_socket(machine_t * mc)
 {
 	httpd_buf_delete_buf(mc->buf);
-	epoll_ctl(epollfd, EPOLL_CTL_DEL, mc->sfd, NULL);
 	close(mc->ffd);
 	close(mc->sfd);
 	

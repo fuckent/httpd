@@ -8,7 +8,7 @@ OBJDIRS	=
 
 objs	:= socketpair.o
 
-CCFLAGS := -Wall -MD -ggdb
+CCFLAGS := -Wall -MD -O
 LDFLAGS := -lrt -lpthread -lc 
 
 .PHONY: all clean shmem_bin socketpair_bin
