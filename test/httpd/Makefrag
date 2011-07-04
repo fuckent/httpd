@@ -1,0 +1,23 @@
+OBJDIRS += httpd
+HTTPD_FLAGS := -ggdb -Wno-unused-result
+
+HTTPD_SRCFILES :=	httpd/httpd.c \
+				httpd/html.c \
+				httpd/buf.c  \
+				httpd/do_child.c \
+				httpd/do_parent.c \
+				httpd/connect.c \
+				httpd/debug.c	\
+				httpd/machine.c
+
+HTTPD_OBJFILES := $(patsubst httpd/%.c, $(OBJDIR)/httpd/%.o, $(HTTPD_SRCFILES))
+
+$(OBJDIR)/httpd/%.o: httpd/%.c
+	$(V)echo + cc $<
+	$(V)mkdir -p $(@D)
+	$(V)$(CC) $(CCFLAGS) $(HTTPD_FLAGS) -c -o $@ $<
+
+$(OBJDIR)/httpd_bin: $(HTTPD_OBJFILES)
+	$(V)echo + cc $@
+	$(V)$(LD) $(LDFLAGS) -o $@ $^
+

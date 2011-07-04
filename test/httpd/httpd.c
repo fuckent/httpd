@@ -1,6 +1,6 @@
 /*
  * httpd Testing.
- * ask.c  : Nonblock socket with epoll fd manager.
+ * httpd.c  : Nonblock socket with epoll fd manager.
  * author : Thong T. Nguyen
  *
  * Read *README* file to know about the license.
@@ -9,7 +9,7 @@
  *
  */
 
-#include "ask.h"
+#include "httpd.h"
 
 mqd_t	 		mqds[NPROCESS];
 sem_t *	 		sem;
@@ -29,7 +29,7 @@ main()
 	if (httpd_connect_socket_listen(PORT, &fd) != SUCCESS)
 		ERROR("listen");
 	
-	MSG("[   ask.c]	listen at port 1234");
+	MSG("[ httpd.c]	listen at port 1234");
 	
 	int pid;
 	int i;
@@ -38,7 +38,7 @@ main()
 	sem = sem_open("/httpd_sem", O_CREAT | O_RDWR, 00700, 0);
 	open_mq();
 
-	printf("[   ask.c]	forked %d processes\n", NPROCESS);
+	printf("[ httpd.c]	forked %d processes\n", NPROCESS);
 	for (i = 0; i < NPROCESS; i++)
 	{
 		if ((pid = fork()) < 0)
@@ -49,14 +49,14 @@ main()
 
 		if (pid == 0)
 		{
-			MSG("[   ask.c]	do child");
+			MSG("[ httpd.c]	do child");
 			httpd_do_child(i);					/* child */
 			return -1;
 		}
 		else pid_list[i] = pid;
 	}
 	
-	MSG("[   ask.c]	do parent");
+	MSG("[ httpd.c]	do parent");
 	httpd_do_parent();				/* parent */
 
 	return SUCCESS;

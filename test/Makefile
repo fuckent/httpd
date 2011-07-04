@@ -11,21 +11,21 @@ objs	:= socketpair.o
 CCFLAGS := -Wall -MD -O
 LDFLAGS := -lrt -lpthread -lc 
 
-.PHONY: all clean shmem_bin socketpair_bin
+.PHONY: all clean shmem_bin socketpair_bin httpd_bin
 
 
 all: 
 
 shmem: $(OBJDIR)/shmem_bin
 
-ask: $(OBJDIR)/ask_bin
+httpd: $(OBJDIR)/httpd_bin
 
 socketpair: $(OBJDIR)/socketpair_bin
 
 # Include Makefrags for subdirectories
 include socketpair/Makefrag
 include shmem/Makefrag
-include ask/Makefrag
+include httpd/Makefrag
 
 clean:
 	$(V)echo + rm $(OBJDIR)
