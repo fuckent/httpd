@@ -8,7 +8,7 @@ indent_mode=2
 
 [project]
 name=httpd
-base_path=/home/svm/httpd/test/
+base_path=./
 description=A async web server
 
 [long line marker]
@@ -16,34 +16,31 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=26
-FILE_NAME_0=236;C;0;16;1;1;0;/home/svm/httpd/test/httpd/buf.c;0
-FILE_NAME_1=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/buf.h;0
-FILE_NAME_2=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/connect.c;0
-FILE_NAME_3=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/connect.h;0
-FILE_NAME_4=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/debug.c;0
-FILE_NAME_5=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/debug.h;0
-FILE_NAME_6=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/do_child.c;0
-FILE_NAME_7=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/do_child.h;0
-FILE_NAME_8=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/do_parent.c;0
-FILE_NAME_9=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/do_parent.h;0
-FILE_NAME_10=5274;C;0;16;0;1;0;/home/svm/httpd/test/httpd/fcgi.c;1
-FILE_NAME_11=0;None;0;16;1;1;0;/home/svm/Downloads/nginx-1.0.4/conf/fastcgi_params;0
-FILE_NAME_12=50;C;0;16;1;1;0;/home/svm/httpd/test/httpd/fcgi.h;0
-FILE_NAME_13=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/html.c;0
-FILE_NAME_14=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/html.h;0
-FILE_NAME_15=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/httpd.c;0
-FILE_NAME_16=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/httpd.h;0
-FILE_NAME_17=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/inc.h;0
-FILE_NAME_18=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/machine.c;0
-FILE_NAME_19=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/machine.h;0
-FILE_NAME_20=0;None;0;16;1;1;0;/home/svm/httpd/test/httpd/Makefrag;0
-FILE_NAME_21=66;C;0;16;1;1;0;/home/svm/httpd/test/httpd/time.c;0
-FILE_NAME_22=80;C;0;16;1;1;0;/home/svm/httpd/test/httpd/time.h;0
-FILE_NAME_23=29835;C;0;16;0;1;0;/home/svm/Downloads/nginx-1.0.4/src/http/ngx_http_variables.c;0
-FILE_NAME_24=3049;C;0;16;0;1;0;/home/svm/Downloads/nginx-1.0.4/src/http/ngx_http_variables.h;0
-FILE_NAME_25=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/http.c;0
-FILE_NAME_26=34;C;0;16;0;1;0;/home/svm/httpd/test/httpd/http.h;0
+current_page=6
+FILE_NAME_0=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/buf.c;0;4
+FILE_NAME_1=0;C;0;16;1;1;0;/home/thong/httpd/test/httpd/buf.h;0;4
+FILE_NAME_2=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/connect.c;0;4
+FILE_NAME_3=0;C;0;16;1;1;0;/home/thong/httpd/test/httpd/connect.h;0;4
+FILE_NAME_4=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/debug.c;0;4
+FILE_NAME_5=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/debug.h;0;4
+FILE_NAME_6=192;C;0;16;0;1;0;/home/thong/httpd/test/httpd/do_child.c;0;4
+FILE_NAME_7=0;C;0;16;1;1;0;/home/thong/httpd/test/httpd/do_child.h;0;4
+FILE_NAME_8=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/do_parent.c;0;4
+FILE_NAME_9=0;C;0;16;1;1;0;/home/thong/httpd/test/httpd/do_parent.h;0;4
+FILE_NAME_10=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/fcgi.c;0;4
+FILE_NAME_11=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/fcgi.h;0;4
+FILE_NAME_12=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/html.c;0;4
+FILE_NAME_13=0;C;0;16;1;1;0;/home/thong/httpd/test/httpd/html.h;0;4
+FILE_NAME_14=0;C;0;16;1;1;0;/home/thong/httpd/test/httpd/http.c;0;4
+FILE_NAME_15=0;C;0;16;1;1;0;/home/thong/httpd/test/httpd/http.h;0;4
+FILE_NAME_16=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/httpd.c;0;4
+FILE_NAME_17=211;C;0;16;1;1;0;/home/thong/httpd/test/httpd/httpd.h;0;4
+FILE_NAME_18=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/inc.h;0;4
+FILE_NAME_19=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/machine.c;0;4
+FILE_NAME_20=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/machine.h;0;4
+FILE_NAME_21=0;None;0;16;1;1;0;/home/thong/httpd/test/httpd/Makefrag;0;4
+FILE_NAME_22=0;C;0;16;0;1;0;/home/thong/httpd/test/httpd/time.c;0;4
+FILE_NAME_23=85;C;0;16;1;1;0;/home/thong/httpd/test/httpd/time.h;0;4
 
 [build-menu]
 NF_00_LB=_Make

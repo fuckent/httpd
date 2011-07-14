@@ -33,6 +33,18 @@ httpd_do_child(int id)
     struct epoll_event events[MAX_EVENTS];
     while(1)
     {
+        if (sigio_flag)
+        {
+            sigio_flag = 0;
+            {
+                int newfd;
+                newfd = accept(fd, NULL, NULL);
+                sem_post(sem);
+                // if (newfd == -1) return;
+                httpd_add_fd(newfd);    
+            }
+        }
+
         nfds = epoll_wait(epollfd, events, MAX_EVENTS , 0);
 
 #ifdef  LOG_FILE
@@ -57,8 +69,8 @@ httpd_do_child(int id)
         //printf("[%010ld]  delete dead jobs\n", gettime());
         delete_dead_jobs();
         
-        if (mc_used_list.len == 0 && nfds == 0)
-            pause();
+        /*if (mc_used_list.len == 0 && nfds == 0)
+            pause(); */
     }
     
     return SUCCESS;
@@ -122,29 +134,20 @@ sigpipe_handler(int sig, siginfo_t *si, void *unused)
     sigpipe_flag = TRUE;
 }
 
+/*
 static void
 sigio_handler(int sig, siginfo_t *si, void *unused)
 {
     sigio_flag = TRUE;
     //printf("[%010ld]    got a SIGIO signal from %d\n",gettime(), si->si_pid);
 }
-
+*/
 
 static void
 handler(int sig, siginfo_t *si, void *unused)
 {
     //printf("[%010ld]    got a signal NEW JOB from %d\n",gettime(), si->si_pid);
-    
-    if (sig == SIG_MPWP)
-    {
-        int newfd;
-        newfd = accept(fd, NULL, NULL);
-        fcntl(newfd, F_SETOWN, getpid());
-        fcntl(newfd, F_SETFL, O_ASYNC);
-        sem_post(sem);
-        if (newfd == -1) return;
-        httpd_add_fd(newfd);    
-    }
+    sigio_flag = 1;
         //~ sigio_flag = TRUE;
 }
 
@@ -166,13 +169,13 @@ httpd_setup_handler()
     sa1.sa_sigaction = sigpipe_handler;
     sigaction(SIGPIPE, &sa1, NULL);
 
-    printf("[%010ld]    set up SIGIO signal\n", gettime());
+/*  printf("[%010ld]    set up SIGIO signal\n", gettime());
     struct sigaction sa2;
     sa2.sa_flags = SA_SIGINFO;
     sigemptyset(&sa.sa_mask);
     sa2.sa_sigaction = sigio_handler;
     sigaction(SIGIO, &sa2, NULL);
-
+*/
     return SUCCESS;
 }
 
