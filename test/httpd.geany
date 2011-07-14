@@ -1,0 +1,73 @@
+
+[indentation]
+indent_width=4
+indent_type=1
+indent_hard_tab_width=8
+detect_indent=true
+indent_mode=2
+
+[project]
+name=httpd
+base_path=/home/svm/httpd/test/
+description=A async web server
+
+[long line marker]
+long_line_behaviour=1
+long_line_column=72
+
+[files]
+current_page=26
+FILE_NAME_0=236;C;0;16;1;1;0;/home/svm/httpd/test/httpd/buf.c;0
+FILE_NAME_1=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/buf.h;0
+FILE_NAME_2=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/connect.c;0
+FILE_NAME_3=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/connect.h;0
+FILE_NAME_4=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/debug.c;0
+FILE_NAME_5=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/debug.h;0
+FILE_NAME_6=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/do_child.c;0
+FILE_NAME_7=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/do_child.h;0
+FILE_NAME_8=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/do_parent.c;0
+FILE_NAME_9=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/do_parent.h;0
+FILE_NAME_10=5274;C;0;16;0;1;0;/home/svm/httpd/test/httpd/fcgi.c;1
+FILE_NAME_11=0;None;0;16;1;1;0;/home/svm/Downloads/nginx-1.0.4/conf/fastcgi_params;0
+FILE_NAME_12=50;C;0;16;1;1;0;/home/svm/httpd/test/httpd/fcgi.h;0
+FILE_NAME_13=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/html.c;0
+FILE_NAME_14=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/html.h;0
+FILE_NAME_15=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/httpd.c;0
+FILE_NAME_16=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/httpd.h;0
+FILE_NAME_17=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/inc.h;0
+FILE_NAME_18=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/machine.c;0
+FILE_NAME_19=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/machine.h;0
+FILE_NAME_20=0;None;0;16;1;1;0;/home/svm/httpd/test/httpd/Makefrag;0
+FILE_NAME_21=66;C;0;16;1;1;0;/home/svm/httpd/test/httpd/time.c;0
+FILE_NAME_22=80;C;0;16;1;1;0;/home/svm/httpd/test/httpd/time.h;0
+FILE_NAME_23=29835;C;0;16;0;1;0;/home/svm/Downloads/nginx-1.0.4/src/http/ngx_http_variables.c;0
+FILE_NAME_24=3049;C;0;16;0;1;0;/home/svm/Downloads/nginx-1.0.4/src/http/ngx_http_variables.h;0
+FILE_NAME_25=0;C;0;16;1;1;0;/home/svm/httpd/test/httpd/http.c;0
+FILE_NAME_26=34;C;0;16;0;1;0;/home/svm/httpd/test/httpd/http.h;0
+
+[build-menu]
+NF_00_LB=_Make
+NF_00_CM=make httpd
+NF_00_WD=%p
+NF_01_LB=Make Custom _Target
+NF_01_CM=make 
+NF_01_WD=%p
+NF_02_LB=Make _Object
+NF_02_CM=make %e.o
+NF_02_WD=%p
+NF_03_LB=
+NF_03_CM=
+NF_03_WD=%p
+EX_00_LB=_Execute
+EX_00_CM=./obj/httpd_bin
+EX_00_WD=%p
+CFT_00_LB=_Compile
+CFT_00_CM=make clean httpd
+CFT_00_WD=%p
+CFT_01_LB=_Build
+CFT_01_CM=make httpd
+CFT_01_WD=%p
+filetypes=C;
+CFT_02_LB=Clean
+CFT_02_CM=make clean
+CFT_02_WD=%p

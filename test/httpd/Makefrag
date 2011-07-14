@@ -1,15 +1,17 @@
 OBJDIRS += httpd
-HTTPD_FLAGS := -ggdb -Wno-unused-result
+HTTPD_FLAGS := -Wno-unused-result -ggdb
 
-HTTPD_SRCFILES :=	httpd/httpd.c \
-				httpd/html.c \
-				httpd/buf.c  \
-				httpd/do_child.c \
-				httpd/do_parent.c \
-				httpd/connect.c \
+HTTPD_SRCFILES :=   httpd/httpd.c \
+				httpd/html.c	\
+				httpd/buf.c	\
+				httpd/do_child.c	\
+				httpd/do_parent.c	\
+				httpd/connect.c	\
 				httpd/debug.c	\
 				httpd/machine.c	\
-				httpd/time.c
+				httpd/time.c	\
+				httpd/fcgi.c
+				# httpd/http_parser.c
 
 HTTPD_OBJFILES := $(patsubst httpd/%.c, $(OBJDIR)/httpd/%.o, $(HTTPD_SRCFILES))
 

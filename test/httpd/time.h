@@ -1,5 +1,5 @@
 #ifndef TIME_H
-#define TIME_H		1
+#define TIME_H      1
 
 #include "inc.h"
 

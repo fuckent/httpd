@@ -3,14 +3,14 @@
 
 #include "inc.h"
 
-#define DEBUG_MODE		1
-#define LOG_FILE		"log.txt"
+#define DEBUG_MODE      1
+// #define LOG_FILE        "log.txt"
 
 httpd_return_t httpd_debug_config();
 
 #ifndef DEBUG_MODE
-	#undef MSG
-	#define MSG(msg)	{}
+    #undef MSG
+    #define MSG(msg)    {}
 #endif
 
 

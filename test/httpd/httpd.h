@@ -10,7 +10,8 @@
 #include "debug.h"
 #include "machine.h"
 #include "time.h"
+#include "http_parser.h"
 
-static httpd_return_t 	open_mq();
+static httpd_return_t   open_mq();
 
 #endif

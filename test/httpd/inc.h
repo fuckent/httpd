@@ -28,58 +28,58 @@
 typedef int BOOL;
 
 #ifndef FALSE
-#define FALSE					0
+#define FALSE                   0
 #endif
 
 #ifndef TRUE
-#define TRUE					!FALSE
+#define TRUE                    !FALSE
 #endif
 
 
-#define BACK_LOG				10
+#define BACK_LOG                10
 
-#define MAX_EVENTS				10
-#define PORT					"1234"
-#define NPROCESS				2
-#define NFDPROCESS				1024
+#define MAX_EVENTS              1000
+#define PORT                    "1234"
+#define NPROCESS                1
+#define NFDPROCESS              1024
 
-#define MAX_NUMBER_FD			100
-#define SIG_MPWP				50
+#define MAX_NUMBER_FD           100
+#define SIG_MPWP                50
 
 
 #define ERROR(msg) \
-		do { perror(msg); exit(EXIT_FAILURE); } while (0)
+        do { perror(msg); exit(EXIT_FAILURE); } while (0)
 
 #ifndef MSG
 #define MSG(msg) \
-		do { printf(msg "\n"); } while (0)
+        do { printf(msg "\n"); } while (0)
 #endif
 
 typedef
 enum
 {
-		SUCCESS 				=	 0,
-		E_GET_ADDR_FAILED 		=	-1,
-		E_BIND_FAILED			=	-2,
-		E_LISTEN_FAILED			= 	-3,
-		E_GET_REQUEST			=	-4,
-		E_CANT_OPEN_FILE		= 	-5,
-		E_TIME_OUT				= 	-6,		
-		E_MACHINE_EMPTY			=	-7,
-		E_MACHINE_INVAILD_STATE	=	-8,
-		E_MACHINE_READ_SOCKET	=	-9,
-		E_MACHINE_SEND_FILE		=	-10,
-		E_MACHINE_WRITE_SOCKET	=	-11,
+        SUCCESS                 =    0,
+        E_GET_ADDR_FAILED       =   -1,
+        E_BIND_FAILED           =   -2,
+        E_LISTEN_FAILED         =   -3,
+        E_GET_REQUEST           =   -4,
+        E_CANT_OPEN_FILE        =   -5,
+        E_TIME_OUT              =   -6,     
+        E_MACHINE_EMPTY         =   -7,
+        E_MACHINE_INVAILD_STATE =   -8,
+        E_MACHINE_READ_SOCKET   =   -9,
+        E_MACHINE_SEND_FILE     =   -10,
+        E_MACHINE_WRITE_SOCKET  =   -11,
+        E_SOCKET_CONNECT        =   -12,
 } httpd_return_t;
 
 
-extern mqd_t	 		mqds[NPROCESS];
-extern sem_t *	 		sem;
-extern int				epollfd;
-extern int				fd;
-extern int 				fds[MAX_NUMBER_FD];
-extern pid_t 			pid_list[NPROCESS];
-extern BOOL				sigpipe_flag;
-
+extern mqd_t            mqds[NPROCESS];
+extern sem_t *          sem;
+extern int              epollfd;
+extern int              fd;
+extern int              fds[MAX_NUMBER_FD];
+extern pid_t            pid_list[NPROCESS];
+extern BOOL             sigpipe_flag;
 
 #endif
